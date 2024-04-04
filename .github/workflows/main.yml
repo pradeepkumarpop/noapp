@@ -1,7 +1,9 @@
 name: Simple Workflow
 
 on:
-  push
+  push:
+    branches:
+      - main
 
 jobs:
   job1:
