@@ -1,11 +1,29 @@
-name: My First Workflow
+name: Example Workflow
 
-on: [push]
-
+on: workflow_dispatch
 jobs:
-  print_message:
+  first-job:
     runs-on: ubuntu-latest
-
+    outputs:
+      first-job-output: ${{ steps.first-step.outputs.message }}
     steps:
-    - name: Print a Message
-      run: echo "Hello, GitHub Actions!"
+      - name: First Step
+        id: first-step
+        run: echo "::set-output name=message::This is output from the first job"
+
+  second-job:
+    needs: first-job
+    runs-on: ubuntu-latest
+    outputs:
+      second-job-output: ${{ steps.second-step.outputs.message }}
+    steps:
+      - name: Second Step
+        id: second-step
+        run: echo "::set-output name=message::This is output from the second job, using first job output: ${{ needs.first-job.outputs.first-job-output }}"
+
+  third-job:
+    needs: second-job
+    runs-on: ubuntu-latest
+    steps:
+      - name: Third Step
+        run: echo "The output from the second job was: ${{ needs.second-job.outputs.second-job-output }}"
