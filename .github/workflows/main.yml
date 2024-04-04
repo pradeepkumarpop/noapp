@@ -1,29 +1,33 @@
-name: Example Workflow
+name: Example Workflow with Job Outputs and Error Handling
 
-on: workflow_dispatch
+on: [push]  # Trigger on push events
+
 jobs:
-  first-job:
+  job1:
     runs-on: ubuntu-latest
+    # Map step outputs to job outputs
     outputs:
-      first-job-output: ${{ steps.first-step.outputs.message }}
+      output1: ${{ steps.step1.outputs.test }}
+      output2: ${{ steps.step2.outputs.test }}
     steps:
-      - name: First Step
-        id: first-step
-        run: echo "::set-output name=message::This is output from the first job"
+      - id: step1
+        run: echo "test=hello" >> "$GITHUB_OUTPUT"
+      - id: step2
+        run: echo "test=world" >> "$GITHUB_OUTPUT"
+        # Handle potential errors in step2 (optional)
+        # Add checks or error redirection here
 
-  second-job:
-    needs: first-job
+  job2:
     runs-on: ubuntu-latest
-    outputs:
-      second-job-output: ${{ steps.second-step.outputs.message }}
+    needs: job1  # Depends on successful completion of job1
     steps:
-      - name: Second Step
-        id: second-step
-        run: echo "::set-output name=message::This is output from the second job, using first job output: ${{ needs.first-job.outputs.first-job-output }}"
+      - name: Set environment variables from job1 outputs
+        env:
+          OUTPUT1: ${{ needs.job1.outputs.output1 }}
+          OUTPUT2: ${{ needs.job1.outputs.output2 }}
+      - name: Print job outputs
+        run: echo "$OUTPUT1 $OUTPUT2"
 
-  third-job:
-    needs: second-job
-    runs-on: ubuntu-latest
-    steps:
-      - name: Third Step
-        run: echo "The output from the second job was: ${{ needs.second-job.outputs.second-job-output }}"
+      # Handle potential errors in job2 (optional)
+      # Add checks or error redirection here
+
