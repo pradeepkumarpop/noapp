@@ -20,7 +20,7 @@ export default function Homescreen({ user }) {
           </button>
     </div>
   );
-}
+} 
 
 export async function getServerSideProps(context) {
   const session = await getSession(context);
