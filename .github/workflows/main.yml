@@ -1,7 +1,7 @@
-name: Example Workflow with Job Outputs and Error Handling
+name: Simple Workflow
 
 on:
-  push:  # Trigger on push events
+  push
 
 jobs:
   job1:
@@ -12,14 +12,10 @@ jobs:
     steps:
       - name: Step 1
         id: step1
-        run: |
-          echo "test=hello" >> $GITHUB_ENV
+        run: echo "hello"
       - name: Step 2
         id: step2
-        run: |
-          echo "test=world" >> $GITHUB_ENV
-        # Handle potential errors in step2 (optional)
-        # Add checks or error redirection here
+        run: echo "world"
 
   job2:
     runs-on: ubuntu-latest
@@ -32,6 +28,3 @@ jobs:
       - name: Print job outputs
         run: |
           echo $OUTPUT1 $OUTPUT2
-
-      # Handle potential errors in job2 (optional)
-      # Add checks or error redirection here
