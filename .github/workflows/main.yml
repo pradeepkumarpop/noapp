@@ -11,9 +11,9 @@ jobs:
       output2: ${{ steps.step2.outputs.test }}
     steps:
       - id: step1
-        run: echo "test=hello" >> "$GITHUB_OUTPUT"
+        run: echo "::set-output name=test::hello"
       - id: step2
-        run: echo "test=world" >> "$GITHUB_OUTPUT"
+        run: echo "::set-output name=test::world"
         # Handle potential errors in step2 (optional)
         # Add checks or error redirection here
 
@@ -30,4 +30,3 @@ jobs:
 
       # Handle potential errors in job2 (optional)
       # Add checks or error redirection here
-
