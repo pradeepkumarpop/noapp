@@ -10,3 +10,4 @@ export default function Profile() {
   return <p>You are authenciated</p>;
 }  
    
+  
